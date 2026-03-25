@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
 import "./contact.css";
 import { validateForm } from "./validations";
-import emailjs from '@emailjs/browser';
 
 const Contact = ({ darkMode }) => {
   const form = useRef();
@@ -28,35 +27,51 @@ const Contact = ({ darkMode }) => {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const { formIsValid, errors } = validateForm(formData);
-    setErrors(errors);
+const handleSubmit = (e) => {
+  e.preventDefault();
 
-    if (formIsValid) {
-      sendEmail(e);
+  const { formIsValid, errors } = validateForm(formData);
+
+  console.log("Form valid:", formIsValid);
+  console.log("Errors:", errors);
+
+  setErrors(errors);
+
+  if (formIsValid) {
+    console.log("✅ Calling sendEmail");
+    sendEmail();
+  } else {
+    console.log("❌ Form blocked");
+  }
+};
+
+const sendEmail = async () => {
+  console.log("🚀 Sending request...");
+
+  try {
+    const response = await fetch("https://contact-backend-hloc.onrender.com/send-email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    console.log("✅ Response received:", response);
+
+    const data = await response.json();
+    console.log("📦 Data:", data);
+
+    if (response.ok) {
+      alert("Email sent successfully");
+    } else {
+      alert("Error sending email");
     }
-  };
-
-  const sendEmail = (e) => {
-    emailjs
-      .sendForm(
-        'service_1geoilp', 
-        'template_z1fuulc', 
-        form.current, 
-        '4LYfef9_CkNTqHdv9'
-      )
-      .then(
-        () => {
-          console.log('form data:', formData);
-          alert("Form submitted successfully!");
-        },
-        (error) => {
-          console.log('FAILED...', error.text);
-          alert("Failed to send form. Please try again.");
-        },
-      );
-  };
+  } catch (error) {
+    console.error("❌ Fetch error:", error);
+    alert("Server error");
+  }
+};
 
   return (
     <section className="section contact" id="contact">
