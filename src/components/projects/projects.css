@@ -12,13 +12,26 @@
   margin-bottom: 30px;
 }
 
+.project_category{
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.category_name{
+  font-size: 35px;
+  color: hsl(268, 95%, 64%);
+  margin-bottom: 30px;
+}
+
 .projects-container {
-  width: 80%;
+  width: 90%;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 100px;
-
 }
 
 .project-container {
@@ -27,10 +40,11 @@
   align-items: center;
   height: 300px;
   padding: 10px 30px;
+  width: 80%;
 }
 
 .project-img {
-  height: 350px;
+  height: 100%;
   width: auto;
   border-radius: 12px;
   transition: scale 0.3s ease;
